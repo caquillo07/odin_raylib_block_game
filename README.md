@@ -11,6 +11,10 @@ of features that are very useful for game development, and most of the third par
 Other languages considered were C, C++, Rust and Zig, all of which I will be trying next.
 
 
+## TODO
+- [ ] Add a game over screen
+- [ ] Add a score system
+
 ## Running
 
 First, you need to install the Raylib library. You can download it from the official website: https://www.raylib.com/
