@@ -10,11 +10,6 @@ Odin was chosen for its simplicity, performance and control of low level details
 of features that are very useful for game development, and most of the third party libraries I need come vendored in.
 Other languages considered were C, C++, Rust and Zig, all of which I will be trying next.
 
-
-## TODO
-- [ ] Add a game over screen
-- [ ] Add a score system
-
 ## Running
 
 First, you need to install the Raylib library. You can download it from the official website: https://www.raylib.com/
@@ -25,4 +20,10 @@ Lastly, you can run the game by running the following command in the terminal:
 ```bash
 mkdir -p bin
 odin run . --out:bin/game
+```
+
+Alternatively, the provided `run.sh` script can be used to run the game.
+
+```bash
+./run.sh
 ```
