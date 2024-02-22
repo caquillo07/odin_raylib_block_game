@@ -5,17 +5,18 @@ import "core:fmt"
 import rl "vendor:raylib"
 
 Game :: struct {
-	grid: Grid,
-	blocks: [BlockType]Block,
-	usedBlocks: [BlockType]bool,
+	grid:         Grid,
+	blocks:       [BlockType]Block,
+	usedBlocks:   [BlockType]bool,
 	currentBlock: Block,
-	nextBlock: Block,
+	nextBlock:    Block,
+	gameOver:     bool,
 }
 
 Game_New :: proc() -> Game {
 	g := Game {
 		grid = Grid_New(),
-		blocks = [BlockType]Block{
+		blocks = [BlockType]Block {
 			.L = Block_New(.L),
 			.J = Block_New(.J),
 			.I = Block_New(.I),
@@ -53,7 +54,7 @@ Game_RandomBlock :: proc(g: ^Game) -> Block {
 		Game_ResetUsedBlocks(g)
 	}
 
-	availableBlocks := [dynamic]BlockType{ }
+	availableBlocks := [dynamic]BlockType{}
 	defer delete(availableBlocks)
 
 	for isUsed, blockType in g.usedBlocks {
@@ -74,44 +75,67 @@ Game_Draw :: proc(g: ^Game) {
 	Block_Draw(&g.currentBlock)
 }
 
+Game_Reset :: proc(g: ^Game) {
+	Grid_Reset(&g.grid)
+	g.currentBlock = Game_RandomBlock(g)
+	g.nextBlock = Game_RandomBlock(g)
+	g.gameOver = false
+}
+
 Game_HandleInput :: proc(g: ^Game) {
-	if rl.IsKeyPressed(rl.KeyboardKey.RIGHT) {
+	keyPress := rl.GetKeyPressed()
+	if g.gameOver && keyPress != .KEY_NULL {
+		Game_Reset(g)
+		return
+	}
+	#partial switch keyPress {
+	case .RIGHT:
 		Game_MoveBlockRight(g)
-	}
-	if rl.IsKeyPressed(rl.KeyboardKey.LEFT) {
+	case .LEFT:
 		Game_MoveBlockLeft(g)
-	}
-	if rl.IsKeyPressed(rl.KeyboardKey.DOWN) {
+	case .DOWN:
 		Game_MoveBlockDown(g)
-	}
-	if rl.IsKeyPressed(rl.KeyboardKey.UP) {
+		break
+	case .UP:
 		Game_RotateBlock(g)
 	}
 }
 
 Game_MoveBlockLeft :: proc(g: ^Game) {
-	Block_Move(&g.currentBlock, Position{ 0, -1 })
+	if g.gameOver {
+		return
+	}
+	Block_Move(&g.currentBlock, Position{0, -1})
 	if Game_IsBlockOutside(g) || !Game_BlockFits(g, &g.currentBlock) {
-		Block_Move(&g.currentBlock, Position{ 0, 1 })
+		Block_Move(&g.currentBlock, Position{0, 1})
 	}
 }
 
 Game_MoveBlockRight :: proc(g: ^Game) {
-	Block_Move(&g.currentBlock, Position{ 0, 1 })
+	if g.gameOver {
+		return
+	}
+	Block_Move(&g.currentBlock, Position{0, 1})
 	if Game_IsBlockOutside(g) || !Game_BlockFits(g, &g.currentBlock) {
-		Block_Move(&g.currentBlock, Position{ 0, -1 })
+		Block_Move(&g.currentBlock, Position{0, -1})
 	}
 }
 
 Game_MoveBlockDown :: proc(g: ^Game) {
-	Block_Move(&g.currentBlock, Position{ 1, 0 })
+	if g.gameOver {
+		return
+	}
+	Block_Move(&g.currentBlock, Position{1, 0})
 	if Game_IsBlockOutside(g) || !Game_BlockFits(g, &g.currentBlock) {
-		Block_Move(&g.currentBlock, Position{ -1, 0 })
+		Block_Move(&g.currentBlock, Position{-1, 0})
 		Game_LockBlock(g)
 	}
 }
 
 Game_RotateBlock :: proc(g: ^Game) {
+	if g.gameOver {
+		return
+	}
 	Block_Rotate(&g.currentBlock)
 	if Game_IsBlockOutside(g) {
 		Block_UndoRotation(&g.currentBlock)
@@ -124,6 +148,9 @@ Game_LockBlock :: proc(g: ^Game) {
 		g.grid.grid[tile.row][tile.col] = cast(Color)g.currentBlock.blockType
 	}
 	g.currentBlock = g.nextBlock
+	if (!Game_BlockFits(g, &g.currentBlock)) {
+		g.gameOver = true
+	}
 	g.nextBlock = Game_RandomBlock(g)
 	Grid_ClearFullRows(&g.grid)
 }

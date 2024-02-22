@@ -18,16 +18,16 @@ eventTriggered :: proc(interval: f64 = BlockMoveInterval) -> bool {
 	return false
 }
 
-main :: proc () {
+main :: proc() {
 	rl.InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Block Game - Odin")
 	rl.SetTargetFPS(120)
 
 	game := Game_New()
-	lastUpdateTime : f32 = 0
+	lastUpdateTime: f32 = 0
 
 	for !rl.WindowShouldClose() {
 		Game_HandleInput(&game)
-		if eventTriggered(0.3) {
+		if eventTriggered(0.1) {
 			Game_MoveBlockDown(&game)
 		}
 

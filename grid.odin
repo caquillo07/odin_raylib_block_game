@@ -13,17 +13,21 @@ Position :: struct {
 }
 
 Grid :: struct {
-	grid: [GridNumRows][GridNumCols]Color,
-	numRows: int,
-	numCols: int,
+	grid:     [GridNumRows][GridNumCols]Color,
+	numRows:  int,
+	numCols:  int,
 	cellSize: int,
 }
 
 Grid_New :: proc() -> Grid {
-	return Grid {
-		numRows = GridNumRows,
-		numCols = GridNumCols,
-		cellSize = 30,
+	return Grid{numRows = GridNumRows, numCols = GridNumCols, cellSize = 30}
+}
+
+Grid_Reset :: proc(g: ^Grid) {
+	for i := 0; i < g.numRows; i += 1 {
+		for j := 0; j < g.numCols; j += 1 {
+			g.grid[i][j] = Color(0)
+		}
 	}
 }
 
@@ -41,11 +45,11 @@ Grid_Draw :: proc(g: ^Grid) {
 		for col := 0; col < g.numCols; col += 1 {
 			cellColor := g.grid[row][col]
 			rl.DrawRectangle(
-			i32(col * g.cellSize + 1),
-			i32(row * g.cellSize + 1),
-			i32(g.cellSize - 1),
-			i32(g.cellSize - 1),
-			Colors[cellColor],
+				i32(col * g.cellSize + 1),
+				i32(row * g.cellSize + 1),
+				i32(g.cellSize - 1),
+				i32(g.cellSize - 1),
+				Colors[cellColor],
 			)
 		}
 	}
