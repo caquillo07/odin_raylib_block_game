@@ -12,6 +12,9 @@ Game :: struct {
 	nextBlock:    Block,
 	gameOver:     bool,
 	score:        int,
+	music:        rl.Music,
+	rotateSound:  rl.Sound,
+	clearSound:   rl.Sound,
 }
 
 Game_New :: proc() -> Game {
@@ -30,9 +33,25 @@ Game_New :: proc() -> Game {
 
 	g.currentBlock = Game_RandomBlock(&g)
 	g.nextBlock = Game_RandomBlock(&g)
+	rl.InitAudioDevice()
+
+	g.music = rl.LoadMusicStream("sounds/music.mp3")
+	g.rotateSound = rl.LoadSound("sounds/rotate.mp3")
+	g.clearSound = rl.LoadSound("sounds/clear.mp3")
+
+	rl.PlayMusicStream(g.music)
 	return g
 }
 
+Game_Destroy :: proc(g: ^Game) {
+	rl.UnloadMusicStream(g.music)
+	rl.UnloadSound(g.rotateSound)
+	rl.UnloadSound(g.clearSound)
+
+	rl.CloseAudioDevice()
+}
+
+@(private)
 Game_ResetUsedBlocks :: proc(g: ^Game) {
 	fmt.println("Resetting used blocks")
 	for t in BlockType {
@@ -40,6 +59,7 @@ Game_ResetUsedBlocks :: proc(g: ^Game) {
 	}
 }
 
+@(private)
 Game_GetAvailableBlocks :: proc(g: ^Game) -> i32 {
 	available: i32
 	for isUsed, blockType in g.usedBlocks {
@@ -50,6 +70,7 @@ Game_GetAvailableBlocks :: proc(g: ^Game) -> i32 {
 	return available
 }
 
+@(private)
 Game_RandomBlock :: proc(g: ^Game) -> Block {
 	if Game_GetAvailableBlocks(g) == 0 {
 		Game_ResetUsedBlocks(g)
@@ -59,12 +80,10 @@ Game_RandomBlock :: proc(g: ^Game) -> Block {
 	defer delete(availableBlocks)
 
 	for isUsed, blockType in g.usedBlocks {
-		fmt.println(blockType, isUsed)
 		if !isUsed {
 			append(&availableBlocks, blockType)
 		}
 	}
-	fmt.println(availableBlocks)
 	randomIndex := rl.GetRandomValue(0, i32(len(availableBlocks) - 1))
 	nextType := availableBlocks[randomIndex]
 	g.usedBlocks[nextType] = true
@@ -73,9 +92,18 @@ Game_RandomBlock :: proc(g: ^Game) -> Block {
 
 Game_Draw :: proc(g: ^Game) {
 	Grid_Draw(&g.grid)
-	Block_Draw(&g.currentBlock)
+	Block_Draw(&g.currentBlock, 11, 11)
+	#partial switch g.nextBlock.blockType {
+	case .I:
+		Block_Draw(&g.nextBlock, 255, 290)
+	case .O:
+		Block_Draw(&g.nextBlock, 255, 280)
+	case:
+		Block_Draw(&g.nextBlock, 270, 270)
+	}
 }
 
+@(private)
 Game_Reset :: proc(g: ^Game) {
 	Grid_Reset(&g.grid)
 	g.currentBlock = Game_RandomBlock(g)
@@ -104,6 +132,7 @@ Game_HandleInput :: proc(g: ^Game) {
 	}
 }
 
+@(private)
 Game_MoveBlockLeft :: proc(g: ^Game) {
 	if g.gameOver {
 		return
@@ -114,6 +143,7 @@ Game_MoveBlockLeft :: proc(g: ^Game) {
 	}
 }
 
+@(private)
 Game_MoveBlockRight :: proc(g: ^Game) {
 	if g.gameOver {
 		return
@@ -124,6 +154,7 @@ Game_MoveBlockRight :: proc(g: ^Game) {
 	}
 }
 
+@(private)
 Game_MoveBlockDown :: proc(g: ^Game) {
 	if g.gameOver {
 		return
@@ -135,6 +166,7 @@ Game_MoveBlockDown :: proc(g: ^Game) {
 	}
 }
 
+@(private)
 Game_RotateBlock :: proc(g: ^Game) {
 	if g.gameOver {
 		return
@@ -142,9 +174,12 @@ Game_RotateBlock :: proc(g: ^Game) {
 	Block_Rotate(&g.currentBlock)
 	if Game_IsBlockOutside(g) {
 		Block_UndoRotation(&g.currentBlock)
+	} else {
+		rl.PlaySound(g.rotateSound)
 	}
 }
 
+@(private)
 Game_LockBlock :: proc(g: ^Game) {
 	tiles := Block_GetCellPositions(&g.currentBlock)
 	for tile in tiles {
@@ -155,10 +190,13 @@ Game_LockBlock :: proc(g: ^Game) {
 		g.gameOver = true
 	}
 	g.nextBlock = Game_RandomBlock(g)
-	rowsCleared := Grid_ClearFullRows(&g.grid)
-	Game_UpdateScore(g, rowsCleared, 0)
+	if rowsCleared := Grid_ClearFullRows(&g.grid); rowsCleared > 0 {
+		rl.PlaySound(g.clearSound)
+		Game_UpdateScore(g, rowsCleared, 0)
+	}
 }
 
+@(private)
 Game_IsBlockOutside :: proc(g: ^Game) -> bool {
 	tiles := Block_GetCellPositions(&g.currentBlock)
 	for tile in tiles {
@@ -169,6 +207,7 @@ Game_IsBlockOutside :: proc(g: ^Game) -> bool {
 	return false
 }
 
+@(private)
 Game_BlockFits :: proc(g: ^Game, b: ^Block) -> bool {
 	tiles := Block_GetCellPositions(b)
 	for tile in tiles {
@@ -179,6 +218,7 @@ Game_BlockFits :: proc(g: ^Game, b: ^Block) -> bool {
 	return true
 }
 
+@(private)
 Game_UpdateScore :: proc(g: ^Game, linesCleared, moveDownPoints: int) {
 	switch linesCleared {
 	case 1:

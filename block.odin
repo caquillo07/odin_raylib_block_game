@@ -130,13 +130,13 @@ Block_GetCellPositions :: proc(b: ^Block) -> [4]Position {
 	return movedTiles
 }
 
-Block_Draw :: proc(b: ^Block) {
+Block_Draw :: proc(b: ^Block, offsetX, offsetY: int) {
 	tiles := Block_GetCellPositions(b)
 
 	for tile in tiles {
 		rl.DrawRectangle(
-			i32(tile.col * b.cellSize + 1 + 10), // 10 is the offset
-			i32(tile.row * b.cellSize + 1 + 10), // 10 is the offset
+			i32(tile.col * b.cellSize + offsetX), // 10 is the offset
+			i32(tile.row * b.cellSize + offsetY), // 10 is the offset
 			i32(b.cellSize - 1),
 			i32(b.cellSize - 1),
 			b.color,

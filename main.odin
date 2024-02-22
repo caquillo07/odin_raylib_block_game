@@ -29,10 +29,18 @@ main :: proc() {
 	lastUpdateTime: f32 = 0
 
 	for !rl.WindowShouldClose() {
+		rl.UpdateMusicStream(game.music)
 		Game_HandleInput(&game)
-		if eventTriggered(0.1) {
+		if eventTriggered(0.2) {
 			Game_MoveBlockDown(&game)
 		}
+
+		sb := strings.builder_make() // will default to 16 cap, 0 len
+		defer strings.builder_destroy(&sb)
+		score := fmt.sbprintf(&sb, "%d", game.score)
+		scoreText := strings.to_string(sb)
+		scoreTextCString := strings.clone_to_cstring(scoreText)
+		scoreTextSize := rl.MeasureTextEx(font, scoreTextCString, 38, 2)
 
 		rl.BeginDrawing()
 		{
@@ -40,12 +48,6 @@ main :: proc() {
 			rl.DrawTextEx(font, "Score", rl.Vector2{365, 15}, 38, 2, rl.WHITE)
 			rl.DrawRectangleRounded(rl.Rectangle{320, 55, 170, 60}, 0.3, 0, Colors[.LightBlue])
 
-			sb := strings.builder_make() // will default to 16 cap, 0 len
-			defer strings.builder_destroy(&sb)
-			score := fmt.sbprintf(&sb, "%d", game.score)
-			scoreText := strings.to_string(sb)
-			scoreTextCString := strings.clone_to_cstring(scoreText)
-			scoreTextSize := rl.MeasureTextEx(font, scoreTextCString, 38, 2)
 
 			rl.DrawTextEx(
 				font,
@@ -56,10 +58,8 @@ main :: proc() {
 				rl.WHITE,
 			)
 
-
 			rl.DrawTextEx(font, "Next", rl.Vector2{370, 175}, 38, 2, rl.WHITE)
 			rl.DrawRectangleRounded(rl.Rectangle{320, 215, 170, 180}, 0.3, 0, Colors[.LightBlue])
-
 
 			if game.gameOver {
 				rl.DrawTextEx(font, "GAME OVER", rl.Vector2{320, 450}, 38, 2, rl.WHITE)
