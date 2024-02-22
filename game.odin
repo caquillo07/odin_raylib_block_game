@@ -11,6 +11,7 @@ Game :: struct {
 	currentBlock: Block,
 	nextBlock:    Block,
 	gameOver:     bool,
+	score:        int,
 }
 
 Game_New :: proc() -> Game {
@@ -80,6 +81,7 @@ Game_Reset :: proc(g: ^Game) {
 	g.currentBlock = Game_RandomBlock(g)
 	g.nextBlock = Game_RandomBlock(g)
 	g.gameOver = false
+	g.score = 0
 }
 
 Game_HandleInput :: proc(g: ^Game) {
@@ -95,6 +97,7 @@ Game_HandleInput :: proc(g: ^Game) {
 		Game_MoveBlockLeft(g)
 	case .DOWN:
 		Game_MoveBlockDown(g)
+		Game_UpdateScore(g, 0, 1)
 		break
 	case .UP:
 		Game_RotateBlock(g)
@@ -152,7 +155,8 @@ Game_LockBlock :: proc(g: ^Game) {
 		g.gameOver = true
 	}
 	g.nextBlock = Game_RandomBlock(g)
-	Grid_ClearFullRows(&g.grid)
+	rowsCleared := Grid_ClearFullRows(&g.grid)
+	Game_UpdateScore(g, rowsCleared, 0)
 }
 
 Game_IsBlockOutside :: proc(g: ^Game) -> bool {
@@ -173,4 +177,18 @@ Game_BlockFits :: proc(g: ^Game, b: ^Block) -> bool {
 		}
 	}
 	return true
+}
+
+Game_UpdateScore :: proc(g: ^Game, linesCleared, moveDownPoints: int) {
+	switch linesCleared {
+	case 1:
+		g.score += 100
+	case 2:
+		g.score += 300
+	case 3:
+		g.score += 500
+	case:
+	// nothing
+	}
+	g.score += moveDownPoints
 }
