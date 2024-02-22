@@ -45,8 +45,8 @@ Grid_Draw :: proc(g: ^Grid) {
 		for col := 0; col < g.numCols; col += 1 {
 			cellColor := g.grid[row][col]
 			rl.DrawRectangle(
-				i32(col * g.cellSize + 1),
-				i32(row * g.cellSize + 1),
+				i32(col * g.cellSize + 1 + 10), // 10 is the offset
+				i32(row * g.cellSize + 1 + 10), // 10 is the offset
 				i32(g.cellSize - 1),
 				i32(g.cellSize - 1),
 				Colors[cellColor],

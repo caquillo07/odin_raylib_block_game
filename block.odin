@@ -13,63 +13,62 @@ BlockType :: enum {
 }
 
 BlockPositions := [BlockType][4][]Position {
-	.L = {
-		[]Position { { 0, 2 }, { 1, 0 }, { 1, 1 }, { 1, 2 } },
-		[]Position { { 0, 1 }, { 1, 1 }, { 2, 1 }, { 2, 2 } },
-		[]Position { { 1, 0 }, { 1, 1 }, { 1, 2 }, { 2, 0 } },
-		[]Position { { 0, 0 }, { 0, 1 }, { 1, 1 }, { 2, 1 } },
+	.L =  {
+		[]Position{{0, 2}, {1, 0}, {1, 1}, {1, 2}},
+		[]Position{{0, 1}, {1, 1}, {2, 1}, {2, 2}},
+		[]Position{{1, 0}, {1, 1}, {1, 2}, {2, 0}},
+		[]Position{{0, 0}, {0, 1}, {1, 1}, {2, 1}},
 	},
-	.J = {
-		[]Position { { 0, 0 }, { 1, 0 }, { 1, 1 }, { 1, 2 } },
-		[]Position { { 0, 1 }, { 0, 2 }, { 1, 1 }, { 2, 1 } },
-		[]Position { { 1, 0 }, { 1, 1 }, { 1, 2 }, { 2, 2 } },
-		[]Position { { 0, 1 }, { 1, 1 }, { 2, 0 }, { 2, 1 } },
+	.J =  {
+		[]Position{{0, 0}, {1, 0}, {1, 1}, {1, 2}},
+		[]Position{{0, 1}, {0, 2}, {1, 1}, {2, 1}},
+		[]Position{{1, 0}, {1, 1}, {1, 2}, {2, 2}},
+		[]Position{{0, 1}, {1, 1}, {2, 0}, {2, 1}},
 	},
-	.I = {
-		[]Position { { 1, 0 }, { 1, 1 }, { 1, 2 }, { 1, 3 } },
-		[]Position { { 0, 2 }, { 1, 2 }, { 2, 2 }, { 3, 2 } },
-		[]Position { { 2, 0 }, { 2, 1 }, { 2, 2 }, { 2, 3 } },
-		[]Position { { 0, 1 }, { 1, 1 }, { 2, 1 }, { 3, 1 } },
+	.I =  {
+		[]Position{{1, 0}, {1, 1}, {1, 2}, {1, 3}},
+		[]Position{{0, 2}, {1, 2}, {2, 2}, {3, 2}},
+		[]Position{{2, 0}, {2, 1}, {2, 2}, {2, 3}},
+		[]Position{{0, 1}, {1, 1}, {2, 1}, {3, 1}},
 	},
-	.O = {
-		[]Position { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } },
-		[]Position { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } },
-		[]Position { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } },
-		[]Position { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } },
+	.O =  {
+		[]Position{{0, 0}, {0, 1}, {1, 0}, {1, 1}},
+		[]Position{{0, 0}, {0, 1}, {1, 0}, {1, 1}},
+		[]Position{{0, 0}, {0, 1}, {1, 0}, {1, 1}},
+		[]Position{{0, 0}, {0, 1}, {1, 0}, {1, 1}},
 	},
-	.S = {
-		[]Position { { 0, 1 }, { 0, 2 }, { 1, 0 }, { 1, 1 } },
-		[]Position { { 0, 0 }, { 1, 0 }, { 1, 1 }, { 2, 1 } },
-		[]Position { { 1, 1 }, { 1, 2 }, { 2, 0 }, { 2, 1 } },
-		[]Position { { 0, 1 }, { 1, 1 }, { 1, 2 }, { 2, 2 } },
+	.S =  {
+		[]Position{{0, 1}, {0, 2}, {1, 0}, {1, 1}},
+		[]Position{{0, 0}, {1, 0}, {1, 1}, {2, 1}},
+		[]Position{{1, 1}, {1, 2}, {2, 0}, {2, 1}},
+		[]Position{{0, 1}, {1, 1}, {1, 2}, {2, 2}},
 	},
-	.T = {
-		[]Position { { 0, 1 }, { 1, 0 }, { 1, 1 }, { 1, 2 } },
-		[]Position { { 0, 1 }, { 1, 1 }, { 1, 2 }, { 2, 1 } },
-		[]Position { { 1, 0 }, { 1, 1 }, { 1, 2 }, { 2, 1 } },
-		[]Position { { 0, 1 }, { 1, 0 }, { 1, 1 }, { 2, 1 } },
+	.T =  {
+		[]Position{{0, 1}, {1, 0}, {1, 1}, {1, 2}},
+		[]Position{{0, 1}, {1, 1}, {1, 2}, {2, 1}},
+		[]Position{{1, 0}, {1, 1}, {1, 2}, {2, 1}},
+		[]Position{{0, 1}, {1, 0}, {1, 1}, {2, 1}},
 	},
-	.Z = {
-		[]Position { { 0, 0 }, { 0, 1 }, { 1, 1 }, { 1, 2 } },
-		[]Position { { 0, 2 }, { 1, 1 }, { 1, 2 }, { 2, 1 } },
-		[]Position { { 1, 0 }, { 1, 1 }, { 2, 1 }, { 2, 2 } },
-		[]Position { { 0, 1 }, { 1, 0 }, { 1, 1 }, { 2, 0 } },
+	.Z =  {
+		[]Position{{0, 0}, {0, 1}, {1, 1}, {1, 2}},
+		[]Position{{0, 2}, {1, 1}, {1, 2}, {2, 1}},
+		[]Position{{1, 0}, {1, 1}, {2, 1}, {2, 2}},
+		[]Position{{0, 1}, {1, 0}, {1, 1}, {2, 0}},
 	},
 }
 
 Block :: struct {
-	color: rl.Color,
-	cellSize: int,
+	color:         rl.Color,
+	cellSize:      int,
 	rotationState: int,
-	blockType: BlockType,
-	rowOffset: int,
-	colOffset: int,
-
-	cells: [4][]Position,
+	blockType:     BlockType,
+	rowOffset:     int,
+	colOffset:     int,
+	cells:         [4][]Position,
 }
 
 Block_New :: proc(t: BlockType) -> Block {
-	initialPos : Position
+	initialPos: Position
 	switch t {
 	case .L:
 		initialPos.row = 0
@@ -93,15 +92,17 @@ Block_New :: proc(t: BlockType) -> Block {
 		initialPos.row = 0
 		initialPos.col = 3
 	}
-	return Block {
-		color = Colors[cast(Color)t],
-		cellSize = 30,
-		rotationState = 0,
-		blockType = t,
-		rowOffset = initialPos.row,
-		colOffset = initialPos.col,
-		cells = BlockPositions[t],
-	}
+	return(
+		Block {
+			color = Colors[cast(Color)t],
+			cellSize = 30,
+			rotationState = 0,
+			blockType = t,
+			rowOffset = initialPos.row,
+			colOffset = initialPos.col,
+			cells = BlockPositions[t],
+		} \
+	)
 }
 
 Block_Move :: proc(b: ^Block, p: Position) {
@@ -122,9 +123,9 @@ Block_UndoRotation :: proc(b: ^Block) {
 
 Block_GetCellPositions :: proc(b: ^Block) -> [4]Position {
 	tiles := b.cells[b.rotationState]
-	movedTiles := [4]Position{ }
+	movedTiles := [4]Position{}
 	for tile, i in &tiles {
-		movedTiles[i] = Position{ tile.row + b.rowOffset, tile.col + b.colOffset }
+		movedTiles[i] = Position{tile.row + b.rowOffset, tile.col + b.colOffset}
 	}
 	return movedTiles
 }
@@ -134,11 +135,11 @@ Block_Draw :: proc(b: ^Block) {
 
 	for tile in tiles {
 		rl.DrawRectangle(
-		i32(tile.col * b.cellSize + 1),
-		i32(tile.row * b.cellSize + 1),
-		i32(b.cellSize - 1),
-		i32(b.cellSize - 1),
-		b.color,
+			i32(tile.col * b.cellSize + 1 + 10), // 10 is the offset
+			i32(tile.row * b.cellSize + 1 + 10), // 10 is the offset
+			i32(b.cellSize - 1),
+			i32(b.cellSize - 1),
+			b.color,
 		)
 	}
 }
