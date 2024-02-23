@@ -1,6 +1,6 @@
-# Odin Tetris Clone Game Using Raylib
+# Odin Block Game Using Raylib
 
-This repo contains the implementation of a clone of the classic game Tetris using the Raylib library,
+This repo contains the implementation of a game inspired by the classic game Tetris using the Raylib library,
 the goal of the project was to learn/practice the basics of game programming and the Odin language.
 
 This project does not follow best practices and is not intended to be a production ready game,
